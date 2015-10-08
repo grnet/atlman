@@ -1,0 +1,32 @@
+<span style="font-size: 0.9em"><font color="red"> Επιλέξτε <strong>Αποθήκευση</strong> για να ολοκληρώσετε την ανάθεση λογαριασμών</font></span>
+<form method="post" name="form_{{project.pk}}">
+<input type="hidden" name="project" id="projectid" value="{{project.pk}}" />
+{{ accountform.as_p }}
+<p class="submit">
+			<input style="width: 100px;" class="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all" name="submit_change_{{project.pk}}" id="costs_{{project.pk}}" type="submit" class="button" value="Αποθήκευση"">
+		</p>
+</form>
+<script>
+$(function(){
+	$('input[name^="submit_change_"]').click(function() {
+			$("#throbbler").show();
+			str = $('form[name="form_{{project.pk}}"]').find("#id_account").serialize();
+			project = $('form[name="form_{{project.pk}}"]').find("#projectid").serialize();
+            str = str+"&"+project;
+            $.ajax({
+                type: "POST",
+                url: "{% url atl.costs.views.useraccounts %}",
+                data: str,
+                success: function(msg){
+                	$("#throbbler").hide();
+                        }
+        });
+    return false;
+        });
+           
+    });
+
+
+	
+	</script>
+

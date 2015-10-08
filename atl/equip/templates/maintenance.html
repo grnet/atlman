@@ -1,0 +1,155 @@
+
+<script>
+	$(function() 
+    { 
+		$.fn.dataTableExt.afnFiltering = new Array();
+        $("#maintenance").dataTable({
+					"bJQueryUI": true,
+					"aoColumns": [ {"bSearchable": true,"bSortable": true }, {"bSearchable": true,"bSortable": true}, {"bSearchable": true,"bSortable": true},
+								{"bSearchable": true,"bSortable": true}, {"bSearchable": true,"bSortable": true}, {"bSearchable": true,"bSortable": true}, {"bSearchable": false,"bSortable": false}, {"bVisible": false, "bSearchable": true,"bSortable": false}],
+					"sPaginationType": "full_numbers",
+					"fnRowCallback": function( nRow, aData, iDisplayIndex ) {
+				     	decorateRow(nRow);
+					  	return nRow;
+					},
+					"bDestroy": true
+
+	});
+	
+	$.fn.dataTableExt.afnFiltering.push(
+ 	function( oSettings, aData, iDataIndex ) {
+ 		// "date-range" is the id for my input
+ 		var dateRangemin = $('#date-range-min').attr("value");
+		var dateRangemax = $('#date-range-max').attr("value");
+
+		// parse the range from a single field into min and max, remove " - "
+		dateMin = dateRangemin.substring(0,4) + dateRangemin.substring(5,7)  + dateRangemin.substring(8,10);
+		dateMax = dateRangemax.substring(0,4) + dateRangemax.substring(5,7)  + dateRangemax.substring(8,10);
+
+		// 4 here is the column where my dates are.
+ 		var date = aData[3];
+
+ 		// remove the time stamp out of my date
+ 		// 2010-04-11 20:48:22 -> 2010-04-11
+ 		date = date.substring(0,10);
+ 		// remove the "-" characters
+ 		// 2010-04-11 -> 20100411
+ 		date = date.substring(0,4) + date.substring(5,7) + date.substring( 8,10 )
+
+		// run through cases
+ 		if ( dateMin == "" && date <= dateMax){
+ 			return true;
+ 		}
+ 		else if ( dateMin =="" && date <= dateMax ){
+ 			return true;
+ 		}
+ 		else if ( dateMin <= date && "" == dateMax ){
+ 			return true;
+ 		}
+ 		else if ( dateMin <= date && date <= dateMax ){
+ 			return true;
+ 		}
+		// all failed
+ 		return false;
+ 	});
+	var oTable = $('#maintenance').dataTable();
+	$('#date-range-min').change( function() { oTable.fnDraw(); } );
+	$('#date-range-max').change( function() { oTable.fnDraw(); } );
+	$( "#date-range-min" ).datepicker({ dateFormat: 'yy-mm-dd' , changeMonth: true, changeYear: true }).datepicker( $.datepicker.regional[ "el" ] );
+	$( "#date-range-max" ).datepicker({ dateFormat: 'yy-mm-dd' , changeMonth: true, changeYear: true }).datepicker( $.datepicker.regional[ "el" ] );
+
+
+    });
+	
+	
+	function decorateRow(row) {
+		var purdate = $(row).children(".dateclass").html().trim();
+		var myDate = new Date(purdate);
+		var today = new Date();
+		var one_day=1000*60*60*24;
+	
+	//Calculate difference btw the two dates, and convert to days
+		var datediff = Math.ceil((myDate.getTime()-today.getTime())/(one_day))
+		if (datediff<=0){
+			$(row).addClass('gradeX');
+		}
+		else if (datediff>0 && datediff<31){
+			$(row).addClass('gradeY');
+		}
+		else{
+			$(row).addClass('gradeA');
+		}
+	}
+</script>
+
+		<style type="text/css" media="screen">
+
+			
+			/*
+			 * Override styles needed due to the mix of three different CSS sources! For proper examples
+			 * please see the themes example in the 'Examples' section of this site
+			 */
+			.dataTables_info { padding-top: 0; }
+			.dataTables_paginate { padding-top: 0; }
+			.css_right { float: right; }
+			#maintenance_wrapper .fg-toolbar { font-size: 0.9em }
+			#theme_links span { float: left; padding: 2px 10px; }
+			
+		</style>
+
+<table cellpadding="0" cellspacing="0" border="0" class="display">
+
+				<tbody>
+					<tr id="filter_maintenance">
+						<td align="left">Maintenance End Date</td>
+						<td align="left">
+							<label for="date-range-min">From:</label><input type="text" name="date-range-min" id="date-range-min">
+							<label for="date-range-max">To:</label><input type="text" name="date-range-max" id="date-range-max">
+						</td>
+					</tr>										
+				</tbody>
+			</table>
+    <table id="maintenance" cellpadding="0" cellspacing="0" border="0" class="display">
+<thead> 
+<tr> 
+    <th>Description</th> 
+    <th>Company</th>
+	<th>Protocol No.</th>
+    <th>Start Date</th> 
+    <th>End Date</th> 
+    <th>Products</th>
+	<th>Actions</th>
+	<th>Status</th>
+</tr> 
+</thead>
+<tbody>
+	{% for main in maintenance %}
+	<tr>
+		<td>
+		{{main.description}}
+		</td>
+		<td>
+		{{main.companyoid}}
+		</td>
+		<td>
+		{{main.protocol_num}}
+		</td>
+		<td>
+		{{main.startdate}}
+		</td>
+		<td class="dateclass">
+		{{main.enddate}}
+		</td>
+		<td>
+		{% for product in main.products.all %}{{product}}{% if product.is_in_maintenance %}{% if today > main.enddate %} <sup><font color="red">Updated</font></sup>{% endif %}{% endif %}<br>{% endfor %}
+		</td>
+		<td>
+			<a href="{% url admin:equip_maintenance_change main.pk %}" target="_blank">edit</a><br>
+		</td>
+		<td>
+			{% for product in main.products.all %}{{product}}{% if product.is_in_maintenance %}{% if today > main.enddate %}Updated{% else %}Active{% endif %}{% else %}Expired{% endif %}<br>{% endfor %}
+		</td>
+	</tr>
+	{% endfor %}
+</tbody>
+</table>

@@ -1,0 +1,79 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+
+<title>{% block pagetitle %}ΠΑΓΙΑ ΕΔΕΤ{%endblock%}</title>
+
+
+<link rel="stylesheet" type="text/css" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.4/themes/redmond/jquery-ui.css">
+
+<script type="text/javascript"	src="//ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.4/jquery-ui.js"></script>
+<link rel="stylesheet" href="{{MEDIA_URL}}costs/css/style.css" type="text/css" media="screen"/>
+<link rel="stylesheet" href="{{MEDIA_URL}}costs/css/topmenu.css" type="text/css" />
+<script type="text/javascript" src="{{MEDIA_URL}}costs/js/jquery.ui.datepicker-el.js"></script>
+<link rel="stylesheet" type="text/css" media="print" href="{{MEDIA_URL}}costs/css/print.css" />
+<style type="text/css">
+body {
+   /* background-color:#7B7B7B;*/
+    /*background:url("{{MEDIA_URL}}costs/images/bg_main.png") repeat scroll left top transparent;*/
+    }
+</style>
+{% block extrahead %}{% endblock %}
+
+</head>
+<body>
+
+<div class="topperheader"><img src="{{MEDIA_URL}}costs/images/grnetlogo.png"><br>GRNET Costs/Trips Manager</div>
+{% if user.is_authenticated %}
+<div id="header">
+
+        <div id="topmenu">
+		
+            <ul>
+                <li><a href="{% url costs.views.myprojects %}">
+                        <span class="title">Τα έργα μου</span>
+
+                    </a>
+                </li>
+                
+                {% if user.get_profile.count_projects > 0 %}
+                <li><a href="{% url costs.views.useraccounts %}">
+		                        <span class="title">Λογαριασμοί Έργων</span>
+		                    </a>
+		
+		                </li>
+                	{% if user.get_profile.count_accounts > 0 %}
+		                <li><a href="{% url costs.views.costsearch %}">
+		                        <span class="title">Οικονομικά Έργων</span>
+		                    </a>
+		
+		                </li>
+
+		        	{% endif %}
+		        	<li><a href="{% url costs.views.tripsearch %}">
+		                        <span class="title">Οικονομικά Ταξιδίων</span>
+		                    </a>
+		                </li>
+                {% endif %}
+                <li><a href="{% url costs.views.logout_view %}?next=/costs/">
+                        <span class="title">Έξοδος</span>
+                    </a>
+                </li>
+               
+            </ul>
+        </div>
+</div>
+
+
+
+<div id="content_wrapper">
+ {%endif%}
+<div id="content_column">
+<div id="content">
+{% block webcontent %}{% endblock %}
+</div>
+</div>
+</div>
+</body>
+</html>

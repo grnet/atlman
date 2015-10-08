@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US" xml:lang="en">
+<head>
+
+    <title>Overview</title>
+
+    <link rel="stylesheet" href="{{MEDIA_URL}}/css/grnet_project_css/style.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="{{MEDIA_URL}}/css/grnet_project_css/style.css" type="text/css" media="print" />
+    <!-- redmond theme -->
+    <link rel="stylesheet" type="text/css" href="{{MEDIA_URL}}css/jquery-ui.css">
+	<link rel="stylesheet" type="text/css" href="{{MEDIA_URL}}css/table_page.css">
+	<script type="text/javascript"	src="//ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.4/jquery-ui.js"></script>
+	<script type="text/javascript" src="{{MEDIA_URL}}/js/jquery.ui.datepicker-el.js"></script>
+	<script type="text/javascript" src="{{MEDIA_URL}}/js/jquery.dataTables.min.js"></script>
+<style type="text/css">
+	.cartlistitem{
+		-moz-border-radius: 5px 5px 5px 5px;
+	    background: none repeat scroll 0 0 #FFFFDD;
+	    border: 1px solid #FFD700;
+	    margin-bottom: 2px;
+	    padding: 5px;
+	    position: relative;
+	    text-align: left;
+	    top: 3px;
+	}
+	.itemDelete{
+		float: right;
+	}
+</style>
+       <script type="text/javascript">
+        $(document).ready(function() {
+    		$("#throbbler").hide();
+            $('#tabs').tabs({ 
+                spinner: false,
+                select: function(event, ui) {
+                    var tabID = "#ui-tabs-"+(ui.index);
+                    $(tabID).html("<div class='spinner'><br>Loading...</div>");
+                },
+                ajaxOptions: {
+                    error: function(xhr, status, index, anchor) {
+                        $(anchor.hash).html("Couldn't load this tab. We'll try to fix this as soon as possible.");
+                    }
+                }
+            });
+        });
+    </script>
+    
+    {% block extrahead %}{% endblock %}
+</head>
+
+<body>	           
+    <div id="grnet-page-background-simple-gradient">
+    </div>
+    <div id="grnet-main">
+        <div class="grnet-Sheet">
+            <div class="grnet-Sheet-tl"></div>
+            <div class="grnet-Sheet-tr"></div>
+            <div class="grnet-Sheet-bl"></div>
+            <div class="grnet-Sheet-br"></div>
+            <div class="grnet-Sheet-tc"></div>
+            <div class="grnet-Sheet-bc"></div>
+            <div class="grnet-Sheet-cl"></div>
+            <div class="grnet-Sheet-cr"></div>
+            <div class="grnet-Sheet-cc"></div>
+            <div class="grnet-Sheet-body">
+                <div class="grnet-Header">
+                    <div class="grnet-Header-png"></div>
+                </div>
+
+			<div id="tabs">
+			    <ul>
+			        <li><a href="{% url atl.equip.views.products %}"><span>Εξοπλισμός</span></a></li>
+			        <li><a href="{% url atl.equip.views.delegations %}"><span>Αναθέσεις</span></a></li>
+			        <li><a href="{% url atl.equip.views.maintenance %}"><span>Συντηρήσεις</span></a></li>
+			    </ul>
+				<div id="tab1" class="tab_content">
+
+        </div>
+        </div>
+        <div class="cleared"></div>
+    </div>
+    </div>
+    </div>
+<div id="throbbler" style="display: none;">
+<table width="100%" align="center" border="0">
+	<tr>
+		<td align="center">
+		<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>Παρακαλώ Περιμένετε...
+		</td>
+	</tr>
+	<tr>
+		<td align="center">
+		<img src='{{MEDIA_URL}}/images/ajax-loader.gif'/>
+		</td>
+	</tr>
+</table>
+</div>
+<div id="maint_cart_placeholder" style="display:none">
+	<div id="maintcartdiv">
+		<ul id="cartitemslist" style="margin: 0px"></ul>
+	<form id="submitmaintenance" method="GET" action="{% url admin:equip_maintenance_add %}" target="_blank">
+		<input name="products" id="itemsmaintenanceform" type="hidden" value=""/>
+	</form>
+
+	</div>
+</div>
+</body>
+</html>

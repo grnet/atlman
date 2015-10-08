@@ -1,0 +1,70 @@
+
+<script>
+	$(function() 
+    { 
+		$.fn.dataTableExt.afnFiltering = new Array();
+        $("#maintenance").dataTable({
+					"bJQueryUI": true,
+					"aoColumns": [ {"bSearchable": true,"bSortable": true }, {"bSearchable": true,"bSortable": true}, {"bSearchable": true,"bSortable": true},
+								{"bSearchable": true,"bSortable": true}, {"bSearchable": true,"bSortable": true}, {"bSearchable": false,"bSortable": false}],
+					"sPaginationType": "full_numbers",
+					"bDestroy": true
+
+	});
+
+    } 
+); 
+</script>
+
+		<style type="text/css" media="screen">
+
+			
+			/*
+			 * Override styles needed due to the mix of three different CSS sources! For proper examples
+			 * please see the themes example in the 'Examples' section of this site
+			 */
+			.dataTables_info { padding-top: 0; }
+			.dataTables_paginate { padding-top: 0; }
+			.css_right { float: right; }
+			#maintenance_wrapper .fg-toolbar { font-size: 0.9em }
+			#theme_links span { float: left; padding: 2px 10px; }
+			
+		</style>
+
+
+    <table id="maintenance" cellpadding="0" cellspacing="0" border="0" class="display">
+<thead> 
+<tr> 
+    <th>Description</th> 
+    <th>Company</th> 
+    <th>Start Date</th> 
+    <th>End Date</th> 
+    <th>Products</th>
+	<th>Actions</th> 
+</tr> 
+</thead>
+<tbody>
+	{% for main in maintenance %}
+	<tr>
+		<td>
+		{{main.description}}
+		</td>
+		<td>
+		{{main.companyoid}}	
+		</td>
+		<td>
+		{{main.startdate}}
+		</td>
+		<td>
+		{{main.enddate}}
+		</td>
+		<td>
+		{% for product in main.products.all %}{{product}}<br>{% endfor %}
+		</td>
+		<td>
+			<a href="{% url admin:equip_maintenance_change main.pk %}">edit</a><br>
+		</td>
+	</tr>
+	{% endfor %}
+</tbody>
+</table>

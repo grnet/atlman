@@ -1,0 +1,16 @@
+{% for prod in product %}
+<strong>Name:</strong>{{prod}}<br/>
+<strong>Model:</strong>{{prod.model}}<br>
+<strong>Quantity:</strong>{{prod.qty}}<br>
+<strong>Price per piece (no VAT):</strong>{{prod.price}}<br>
+<strong>Date of purchace:</strong>{{prod.date_of_purchase}}<br>
+<strong>Serial:</strong>{{prod.serial_number}}<br>
+<strong>Asset Code:</strong>{{prod.assetcat.id}}<br>
+<strong>Asset Description:</strong>{{prod.assetcat}}<br>
+<strong>Location:</strong>{{prod.location}}<br>
+<strong>Supplier:</strong>{{prod.companyoid}}<br>
+<strong>Project:</strong>{{prod.projectid}}<br>
+<strong>GRNET supervisor:</strong>{{prod.grnet_supervisor}}<br>
+<strong>Total VAT:</strong>{{prod.vat}}<br>
+<strong>Total amount (VAT incl.):</strong>{{prod.totamount}}<br>
+{% endfor %}

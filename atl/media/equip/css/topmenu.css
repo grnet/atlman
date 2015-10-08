@@ -1,0 +1,41 @@
+#topmenu ul {
+    list-style:none;
+    font-family:  "Century Gothic", Helvetica, sans-serif;
+    font-size: 14px;
+    font-weight: normal;
+    letter-spacing: normal;
+    line-height: 1.4em;
+    border-left:none;
+    clear:both;
+    margin:20px;
+}
+#topmenu ul li{
+    float:left;
+}
+#topmenu ul li a{
+    background: url("/media/images/ui-bg_glass_75_e6e6e6_1x400.png") repeat-x scroll 50% 50% #444;
+    display:block;
+    text-decoration:none;
+    background-color:#444;
+    padding:6px 10px;
+	color:#4797ED;
+	width:140px;
+    border-right:1px solid #666;
+}
+
+#topmenu ul li a:hover {
+background: url("/media/images/ui-bg_glass_75_A7A7A7_1x400.png") repeat-x scroll 50% 50% #444;
+}
+
+#topmenu ul li a span {
+    display:block;
+}
+
+#topmenu ul li a span.text{
+    visibility:hidden;
+    font-size:12px;
+    text-align:right;
+}
+#topmenu ul li a:hover span.text{
+    visibility:visible;
+}

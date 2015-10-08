@@ -1,0 +1,11 @@
+{% for prod in product %}
+<strong>Name:</strong>{{prod}}<br/>
+<strong>Model:</strong>{{prod.model}}<br>
+<strong>Serial:</strong>{{prod.serial_number}}<br>
+<strong>Location:</strong>{{prod.location}}<br>
+<strong>Supplier:</strong>{{prod.companyoid}}<br>
+<strong>Project:</strong>{{prod.projectid}}<br>
+<strong>GRNET supervisor:</strong>{{prod.grnet_supervisor}}<br>
+...more to come...
+
+{% endfor %}

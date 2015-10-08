@@ -1,0 +1,67 @@
+{{tripsform.media}}
+<style type="text/css">
+.projectcontent {
+  border: 1px solid black;
+  margin: 10px;
+    }
+table {
+border: 1px solid black;
+width: 100%
+}
+
+.projectdetails{
+background-color: #7D7D7D;
+}
+.content{
+background-color: #E3E3E3;
+}
+#get_xls{
+	width: 100px !important;
+}
+</style>
+
+{% if projlist %}
+<ul>
+<li><strong>Αποτελέσματα:</strong> {{reqdets.type}}</li>
+<li><strong>Έργο:</strong> {{reqdets.project}}</li>
+<li><strong>Από:</strong> {{reqdets.start}}</li>
+<li><strong>Έως:</strong> {{reqdets.end}}</li>
+</ul>
+{% endif %}
+<div id="result_content">
+{% if projlist %}
+	<form name="showcsv" id="showcsv" action="{% url atl.costs.views.results %}" method="post">
+		<input name="get_xls" id="get_xls"  type="submit" value="Download Excel">		
+	</form>
+	{% for proj in projlist %}
+	<div class="projectcontent">
+	<div class="projectdetails">
+		<table>
+			<tr><th  style="text-align: left;">Κωδικός Έργου</th><th style="text-align: center;">Έργο</th><th style="text-align: right;">Σύνολο</th></tr>
+			<tr><td style="text-align: left;">{{proj.project_code}}</td><td style="text-align: center;">{{ proj.project_descr }}</td><td style="text-align: right;">{{proj.projtotal}}</td></tr>
+		</table>
+	</div>
+		{% for acc in proj.accounts %}
+		<div class="content">
+			<table>
+				<tr><th style="text-align: left;">Κωδικός</th><th style="text-align: center;">Ονομασία</th><th style="text-align: right;">Μερικό Σύνολο</th></tr>
+				<tr><td style="text-align: left;">{{ acc.account }}</td><td style="text-align: center;">{{acc.account_descr}}</td><td style="text-align: right;">{{acc.acctotal}}</td></tr>
+			</table>
+		</div>
+		<div class="details">
+			<table>
+			<tr><th style="text-align: left;">Ημερομηνία</th><th style="text-align: center;">Κωδικός</th><th style="text-align: center;">Όνομα</th><th style="text-align: center;">ΑΦΜ</th><th style="text-align: right;">Ποσό</th></tr>
+			{% for dets in acc.details %}
+	
+				<tr><td style="text-align: left;">{{ dets.ftrdate }}</td><td  style="text-align: center;">{{ dets.tradecode }}</td><td style="text-align: center;">{{dets.supname}}</td><td  style="text-align: center;">{% if dets.afm %}{{dets.afm}}{% else %}-{% endif %}</td><td style="text-align: right;">{{dets.cost}}</td></tr>
+		
+			{% endfor %}
+			</table>
+		</div>
+		{% endfor %}
+		</div>
+	{% endfor %}
+{% else %}
+<p class="info_content_title"> <font color="red"> Δεν βρέθηκαν αποτελέσματα για το ερώτημά σας.<br> Προσπαθήστε νέα αναζήτηση με διαφορετικά κριτήρια. <br> <span style="font-size: 0.9em" >Tips: Αυξήστε το χρονικό εύρος ή/και βεβαιωθείτε πως έχετε αναθέσει λογαριασμούς στα έργα σας</span></font></p>
+{% endif %}
+</div>

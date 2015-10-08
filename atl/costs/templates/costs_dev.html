@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+
+<title>{% block pagetitle %}ΠΑΓΙΑ ΕΔΕΤ{%endblock%}</title>
+
+
+<link rel="stylesheet" type="text/css" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.4/themes/redmond/jquery-ui.css">
+
+<script type="text/javascript"	src="//ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.4/jquery-ui.js"></script>
+<link rel="stylesheet" href="{{MEDIA_URL}}costs/css/style.css" type="text/css" media="screen"/>
+<link rel="stylesheet" href="{{MEDIA_URL}}costs/css/topmenu.css" type="text/css" />
+<script type="text/javascript" src="{{MEDIA_URL}}costs/js/jquery.ui.datepicker-el.js"></script>
+<link rel="stylesheet" type="text/css" media="print" href="{{MEDIA_URL}}costs/css/print.css" />
+<style type="text/css">
+body {
+   /* background-color:#7B7B7B;*/
+    /*background:url("{{MEDIA_URL}}costs/images/bg_main.png") repeat scroll left top transparent;*/
+    }
+</style>
+
+      <script>
+	$(function() {
+		$("#showhidesearch").hide();
+
+		$( "#id_start" ).datepicker({ dateFormat: 'dd/mm/yy' , maxDate: '+0d', changeMonth: true, changeYear: true }).datepicker('setDate',new Date()).datepicker( $.datepicker.regional[ "el" ] );
+		
+		$( "#id_end" ).datepicker({ dateFormat: 'dd/mm/yy', maxDate: '+0d', changeMonth: true, changeYear: true }).datepicker('setDate',new Date()).datepicker( $.datepicker.regional[ "el" ] );
+		document.title = 'Αναζήτηση Δαπανών-Πληρωμών';
+		
+	});
+	</script>
+		<script>
+	$(function(){
+		 $('#showhidesearch').click(function(){
+			 $('#getcosts').show();
+			 $('#showhidesearch').hide();
+		 });
+
+           
+    });
+
+
+	
+	</script>
+  {{tripsform.media}}
+
+
+</head>
+<body>
+
+<div class="topperheader"><img src="{{MEDIA_URL}}costs/images/grnetlogo.png"><br>GRNET Costs/Trips Manager</div>
+{% if user.is_authenticated %}
+<div id="header">
+
+
+</div>
+
+
+
+<div id="content_wrapper">
+ {%endif%}
+<div id="content_column">
+<div id="content">
+<div id="search_form_content">
+<input style="width: 120px;" class="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all" name="showhidesearch" id="showhidesearch" type="submit" value="Νέα Αναζήτηση">
+
+<form name="getcosts" id="getcosts" method="post">
+<div id="search_form_wrapper">
+	   	{{ costsform.as_p }}
+	   	<input type="hidden" name="costs" id="costs" value="costs" />
+		<p class="submit">
+		
+			<input style="width: 100px;" class="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all" name="projectcosts" id="projectcosts" type="submit" value="Αναζήτηση">
+		</p>
+</div>
+</form>
+</div>
+<div id="form_results_content"></div>
+</div>
+</div>
+</div>
+</body>
+</html>
+

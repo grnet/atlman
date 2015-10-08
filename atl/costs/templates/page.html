@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US" xml:lang="en">
+<head>
+    <!--
+    Created by Artisteer v2.3.0.21098
+    Base template (without user's data) checked by http://validator.w3.org : "This page is valid XHTML 1.0 Transitional"
+    -->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+    <title>Overview</title>
+
+    <link rel="stylesheet" href="{{MEDIA_URL}}costs/css/grnet_project_css/style.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="{{MEDIA_URL}}costs/css/grnet_project_css/style.css" type="text/css" media="print" />
+    <!-- redmond theme -->
+    <link rel="stylesheet" type="text/css" href="{{MEDIA_URL}}costs/css/jquery-ui.css">
+	<script type="text/javascript"	src="//ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.4/jquery-ui.js"></script>
+	<script type="text/javascript" src="{{MEDIA_URL}}costs/js/jquery.ui.datepicker-el.js"></script>
+    <!--[if IE 6]><link rel="stylesheet" href="style.ie6.css" type="text/css" media="screen" /><![endif]-->
+    <!--[if IE 7]><link rel="stylesheet" href="style.ie7.css" type="text/css" media="screen" /><![endif]-->
+       {% if user.is_authenticated %}
+       <script type="text/javascript">
+        $(document).ready(function() {
+    		$("#throbbler").hide();
+            $('#tabs').tabs({ 
+                spinner: false,
+                select: function(event, ui) {
+                    var tabID = "#ui-tabs-"+(ui.index);
+                    $(tabID).html("<div class='spinner'><br>Loading...</div>");
+                },
+                ajaxOptions: {
+                    error: function(xhr, status, index, anchor) {
+                        $(anchor.hash).html("Couldn't load this tab. We'll try to fix this as soon as possible.");
+                    }
+                }
+            });
+        });
+    </script>
+    {% endif %}
+    
+    {% block extrahead %}{% endblock %}
+</head>
+
+<body>	           
+    <div id="grnet-page-background-simple-gradient">
+    </div>
+    <div id="grnet-main">
+        <div class="grnet-Sheet">
+            <div class="grnet-Sheet-tl"></div>
+            <div class="grnet-Sheet-tr"></div>
+            <div class="grnet-Sheet-bl"></div>
+            <div class="grnet-Sheet-br"></div>
+            <div class="grnet-Sheet-tc"></div>
+            <div class="grnet-Sheet-bc"></div>
+            <div class="grnet-Sheet-cl"></div>
+            <div class="grnet-Sheet-cr"></div>
+            <div class="grnet-Sheet-cc"></div>
+            <div class="grnet-Sheet-body">
+                <div class="grnet-Header">
+                    <div class="grnet-Header-png"></div>
+                </div>
+			{% if user.is_authenticated %}
+			<div id="tabs">
+			    <ul>
+			        <li><a href="{% url atl.costs.views.myprojects %}"><span>Επισκόπηση</span></a></li>
+				{% if user.get_profile.count_projects > 0 %}
+			        <li><a href="{% url atl.costs.views.costsearch %}"><span>Έργα</span></a></li>
+			        <li><a href="{% url atl.costs.views.tripsearch %}"><span>Ταξίδια</span></a></li>
+				{% endif %}
+			        <span class="ui-state-default ui-corner-top" style="float: right; vertical-align: middle; padding: 0.5em 1em;"><a href='{% url costs.views.logout_view %}?next=/costs/'>Έξοδος</a></span>
+			        <li style="float: right; vertical-align: middle; padding: 0.5em 1em;">{{ user.first_name }} {{ user.last_name }} ({{user.get_profile.role.role}})</li>
+			    </ul>
+				<div id="tab1" class="tab_content">
+			
+			{% else %}
+				{% block webcontent %}{% endblock %}
+			{% endif %}		
+        {% if user.is_authenticated %}
+        </div>
+        </div>
+        {% endif %}
+        <div class="cleared"></div>
+    </div>
+    </div>
+    </div>
+<div id="throbbler" style="display: none;">
+<table width="100%" align="center" border="0">
+	<tr>
+		<td align="center">
+		<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>Παρακαλώ Περιμένετε...
+		</td>
+	</tr>
+	<tr>
+		<td align="center">
+		<img src='{{MEDIA_URL}}costs/images/ajax-loader.gif'/>
+		</td>
+	</tr>
+</table>
+</div>
+    
+</body>
+</html>

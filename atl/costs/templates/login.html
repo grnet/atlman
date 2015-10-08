@@ -1,0 +1,36 @@
+{% extends "page.html" %}
+      <script type="text/javascript">
+        $(function() {
+    		$("#throbbler").hide();
+            
+    </script>
+
+{% block webcontent %}
+<div class="loginformcontainer">
+<div>
+<table width="300px" align="center" cellpadding="0" cellspacing="0" border="0">
+
+<tr><td align="center">
+<form method="post" action="{% url django.contrib.auth.views.login %}" class="loginform">{% csrf_token %}
+
+{% if form.errors %}
+<p><font color="red"> Your username and password didn't match. Please try again.</font></p>
+{% endif %}
+<p>{{ form.username.label_tag }}{{ form.username }}</p>
+<p>{{ form.password.label_tag }}{{ form.password }}</p>    
+
+
+
+<p><input style="width: 100px;" class="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all" type="submit" value="login" id="costs"/></p>
+<input type="hidden" name="next" value="/costs" />
+
+
+</form>
+</td></tr>
+</table>
+</div>
+</div>
+
+
+
+{% endblock %}

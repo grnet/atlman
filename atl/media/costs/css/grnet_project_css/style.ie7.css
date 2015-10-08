@@ -1,0 +1,145 @@
+/* begin Box, Sheet */
+.grnet-Sheet-tl
+{
+	clip: rect(auto 11px 11px auto);
+}
+
+.grnet-Sheet-tr
+{
+	clip: rect(auto auto 11px 11px);
+}
+
+.grnet-Sheet-bl
+{
+	clip: rect(11px 11px auto auto);
+}
+
+.grnet-Sheet-br
+{
+	clip: rect(11px auto auto 11px);
+}
+
+.grnet-Sheet-tc
+{
+	clip: rect(auto auto 11px auto);
+}
+
+.grnet-Sheet-bc
+{
+	clip: rect(11px auto auto auto);
+}
+
+.grnet-Sheet-cr
+{
+	clip: rect(auto auto auto 11px);
+}
+
+.grnet-Sheet-cl
+{
+	clip: rect(auto 11px auto auto);
+}
+
+.grnet-Sheet-body
+{
+	zoom: 1;
+}
+/* end Box, Sheet */
+
+/* begin Menu */
+.grnet-nav .r
+{
+	clip: rect(auto auto auto 884px);
+}
+/* end Menu */
+
+/* begin MenuItem */
+.grnet-menu a .r
+{
+	clip: rect(auto auto auto 414px);
+}
+/* end MenuItem */
+
+/* begin Box, Block */
+.grnet-Block-tl
+{
+	clip: rect(auto 13px 13px auto);
+}
+
+.grnet-Block-tr
+{
+	clip: rect(auto auto 13px 13px);
+}
+
+.grnet-Block-bl
+{
+	clip: rect(13px 13px auto auto);
+}
+
+.grnet-Block-br
+{
+	clip: rect(13px auto auto 13px);
+}
+
+.grnet-Block-tc
+{
+	clip: rect(auto auto 13px auto);
+}
+
+.grnet-Block-bc
+{
+	clip: rect(13px auto auto auto);
+}
+
+.grnet-Block-cr
+{
+	clip: rect(auto auto auto 13px);
+}
+
+.grnet-Block-cl
+{
+	clip: rect(auto 13px auto auto);
+}
+
+.grnet-Block-body
+{
+	zoom: 1;
+}
+/* end Box, Block */
+
+/* begin BlockHeader */
+.grnet-BlockHeader .r
+{
+	clip: rect(auto auto auto 894px);
+}
+/* end BlockHeader */
+
+/* begin Box, BlockContent */
+
+.grnet-BlockContent-body
+{
+	zoom: 1;
+}
+/* end Box, BlockContent */
+
+/* begin Box, Post */
+
+.grnet-Post-body
+{
+	zoom: 1;
+}
+/* end Box, Post */
+
+/* begin PostContent */
+.grnet-PostContent
+{
+	height:1%;
+}
+/* end PostContent */
+
+/* begin Button */
+.grnet-button-wrapper .r
+{
+	clip: rect(auto auto auto 404px);
+}
+/* end Button */
+

@@ -1,0 +1,52 @@
+{% block extrahead %}
+      	<script>
+	$(function() {
+		$("#showhidesearch").hide();
+		$( "#id_start" ).datepicker({ dateFormat: 'dd/mm/yy' , maxDate: '+0d',changeMonth: true,changeYear: true }).datepicker('setDate',new Date()).datepicker( $.datepicker.regional[ "el" ] );
+		$( "#id_end" ).datepicker({ dateFormat: 'dd/mm/yy', maxDate: '+0d',changeMonth: true,changeYear: true}).datepicker('setDate',new Date()).datepicker( $.datepicker.regional[ "el" ] );
+		document.title = 'Δαπάνες/Πληρωμές Ταξιδίων'
+	});
+	</script>
+	<script>
+	$(function(){
+	 $('#showhidesearch').click(function(){
+		 $('#gettrips').show();
+		 
+		 $('#showhidesearch').hide();
+	 });
+	 $("#projecttrips").click(function() { 
+		 	$("#throbbler").show();
+            var str = $("#gettrips").serialize();
+            $.ajax({
+                type: "POST",
+                url: "{% url atl.costs.views.results %}",
+                data: str,
+                success: function(data){
+                	$("#throbbler").hide();
+                	$('#gettrips').hide();
+                	$('#showhidesearch').show();
+                    $('#form_results_content').html(data);
+                        }
+        });
+    return false;
+        });
+           
+    });
+
+
+	
+	</script>
+  {{tripsform.media}}
+
+{% endblock %}
+<div id="search_form_content">
+<input style="width: 120px;" class="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all" name="showhidesearch" id="showhidesearch" type="submit" value="Νέα Αναζήτηση">
+<form name="gettrips" id="gettrips" method="post">
+<div id="search_form_wrapper">
+   {{ tripsform.as_p }}
+   <input type="hidden" name="trips" id="trips" value="trips" />
+<p class="submit"><input style="width: 100px;" class="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all" name="projecttrips" id="projecttrips" type="submit" value="Αναζήτηση"></p>
+</div>
+</form>
+</div>
+<div id="form_results_content"></div>

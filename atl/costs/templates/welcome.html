@@ -1,0 +1,37 @@
+<script>
+	$(function() {
+		document.title = 'Overview';
+		$( "#accordion" ).accordion({
+			collapsible: true,
+			active: false,
+			autoHeight: false,
+			changestart: function(event, ui){
+            var clicked = $(this).find('.ui-state-active').attr('id');
+            if (clicked){
+                $('#content_'+clicked).load('{% url atl.costs.views.useraccounts %}?project='+clicked);
+            }
+		}
+		
+		});
+
+	});
+	
+	</script>
+
+    	    	{% if projmsg %}
+    	    	<p class="info_content_title"> Τα έργα μου : <span style="font-size: 0.9em" >(επιλέξτε έργο για ανάθεση λογαριασμών)</span></p>
+    	    	<div id="accordion">
+    	    	{%for project in userprojects%}
+    	    	
+    	    	<h1 id={{project.pk}}><a href="#">{{project}}</a></h1>
+	<div>
+		<div id="content_{{project.pk}}" style="width: 500px;">
+		</div>
+	</div>
+    	    	
+    	    	{%endfor%}
+    	    	</div>
+    	    	{% else %} 
+    	    	<p class="info_content_title"> <font color="red"> Δεν σας έχει ανατεθεί έργο. <br> Επικοινωνήστε με το διαχειριστή </font></p>
+    	    	{%endif%}
+

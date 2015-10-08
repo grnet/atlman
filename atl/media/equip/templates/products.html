@@ -1,0 +1,297 @@
+
+<script type="text/javascript">
+	var prodArr = new Object();
+	
+	Object.size = function(obj) {
+	    var size = 0, key;
+	    for (key in obj) {
+	        if (obj.hasOwnProperty(key)) size++;
+	    }
+	    return size;
+	};
+
+	
+	$(function() 
+    { 
+		$("#products").dataTable({
+					"bJQueryUI": true,
+					"sPaginationType": "full_numbers",
+					"bAutoWidth": true,
+					"aoColumns": [ {"bSearchable": true,"bSortable": true }, {"bSearchable": true,"bSortable": true}, {"bSearchable": true,"bSortable": true},
+								{"bSearchable": true,"bSortable": true}, {"bSearchable": true,"bSortable": true}, {"bSearchable": true,"bSortable": true},
+								{"bSearchable": false,"bSortable": false}, {"bSearchable": false,"bSortable": false}, {"bVisible":false},{"bVisible":false}],
+					"fnFooterCallback": function ( nFoot, aaData, iStart, iEnd, aiDisplay ) {
+						/*
+						 * Calculate the total value in this table (ie inc. outside
+						 * the pagination)
+						 */
+//						var iTotalMarket = 0;
+//						for ( var i=0 ; i<aaData.length ; i++ )
+//						{
+//							iTotalMarket += aaData[i][5]*1;
+//						}
+						var iTotalMarket = 0;
+						for ( var i=iStart ; i<iEnd ; i++ )
+						{
+							iTotalMarket += aaData[ aiDisplay[i] ][5]*1;
+						}
+
+						
+						/* Modify the footer row to match what we want */
+						var nCells = nFoot.getElementsByTagName('th');
+						nCells[1].innerHTML = iTotalMarket.toFixed(2);
+					},
+					"oLanguage": {
+						"sLengthMenu": 'Display <select><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option><option value="-1">All</option></select> records'
+					}
+	});
+$.fn.dataTableExt.afnFiltering = new Array();
+$.fn.dataTableExt.afnFiltering.push(
+ 	function( oSettings, aData, iDataIndex ) {
+ 		// "date-range" is the id for my input
+ 		var dateRangemin = $('#date-range-min').attr("value");
+		var dateRangemax = $('#date-range-max').attr("value");
+
+		// parse the range from a single field into min and max, remove " - "
+		dateMin = dateRangemin.substring(0,4) + dateRangemin.substring(5,7)  + dateRangemin.substring(8,10);
+		dateMax = dateRangemax.substring(0,4) + dateRangemax.substring(5,7)  + dateRangemax.substring(8,10);
+
+		// 4 here is the column where my dates are.
+ 		var date = aData[3];
+
+ 		// remove the time stamp out of my date
+ 		// 2010-04-11 20:48:22 -> 2010-04-11
+ 		date = date.substring(0,10);
+ 		// remove the "-" characters
+ 		// 2010-04-11 -> 20100411
+ 		date = date.substring(0,4) + date.substring(5,7) + date.substring( 8,10 )
+
+		// run through cases
+ 		if ( dateMin == "" && date <= dateMax){
+ 			return true;
+ 		}
+ 		else if ( dateMin =="" && date <= dateMax ){
+ 			return true;
+ 		}
+ 		else if ( dateMin <= date && "" == dateMax ){
+ 			return true;
+ 		}
+ 		else if ( dateMin <= date && date <= dateMax ){
+ 			return true;
+ 		}
+		// all failed
+ 		return false;
+ 	});
+	var oTable = $('#products').dataTable();
+	$('#date-range-min').change( function() { oTable.fnDraw(); } );
+	$('#date-range-max').change( function() { oTable.fnDraw(); } );
+$( "#date-range-min" ).datepicker({ dateFormat: 'yy-mm-dd' , maxDate: '+0d', changeMonth: true, changeYear: true }).datepicker( $.datepicker.regional[ "el" ] );
+$( "#date-range-max" ).datepicker({ dateFormat: 'yy-mm-dd' , maxDate: '+0d', changeMonth: true, changeYear: true }).datepicker( $.datepicker.regional[ "el" ] );
+$( "#maintcartdiv" ).dialog({
+			autoOpen: false,
+			height: 500,
+			width: 350,
+			modal: true,
+			title: "Devices to be assigned maintenance plan",
+			buttons: {
+				"Maintenance": function(){
+					transformArraytoValues();
+					$("#submitmaintenance").submit();
+					var prodArr = new Object();
+					$("#maintcartsize").html(Object.size(prodArr));
+					$(this).dialog("close");
+					
+				},
+				Cancel: function(){
+					$(this).dialog("close");
+				}
+			}
+		});
+$( "#productdetails" ).dialog({
+			autoOpen: false,
+			height: 300,
+			width: 350,
+			modal: true,
+			title: "Product Details",
+			buttons: {
+				Close: function(){
+					$(this).dialog("close");
+				}
+			}
+		});		
+$('.itemDelete').live('click', function() {
+	var itemId = $(this).parent("li").attr("id");
+	itemId = itemId.replace(/item_/g, '');
+	delete prodArr[itemId];
+    $(this).parent().remove();
+	$("#maintcartsize").html(Object.size(prodArr));
+	return false;
+});
+
+
+$("#col9_filter").change( function() { fnFilterColumn( 8 ); } );
+$("#col10_filter").change( function() { fnFilterColumn( 9 ); } );
+
+
+    });
+
+function addToMaint(productid,name){
+	prodArr[productid] = name;
+	$("#maintcartsize").html(Object.size(prodArr));
+	return false;
+}
+
+function showDialog(){
+	var items = '';
+	$("#cartitemslist").html("");
+	for (var key in prodArr){
+		item = prodArr[key];
+		$("#cartitemslist").append("<li id='item_"+key+"' class='cartlistitem'>"+item+"<a href='#' title='delete' class='itemDelete'><img src='{{MEDIA_URL}}css/images/del.png'/></a></li>");
+	}
+
+	$( "#maintcartdiv" ).dialog( "open" );
+	return false;
+}
+
+function showDetails(product_id){
+	$( "#productdetails" ).html( "" );
+	$( "#productdetails" ).load("{% url atl.equip.views.product_details %}?product="+product_id+"");
+	$( "#productdetails" ).dialog( "open" );
+	return false;
+}
+
+function transformArraytoValues(){
+	keylist='';
+	for (var key in prodArr) {
+		keylist = key+","+keylist;
+	}
+	keylist = keylist.slice(0, -1)
+	$("#itemsmaintenanceform").val(keylist);
+}
+
+function fnFilterColumn ( i )
+{
+	$('#products').dataTable().fnFilter( 
+		$("#col"+(i+1)+"_filter").val(),i, false, true, true
+		);
+}
+
+</script>
+
+<div style="float: right; padding-right: 10px; height: 20px; background: none repeat scroll 0% 0% transparent; opacity: 1; border: 0px none; bottom: 0px; top: 5px; right: 20px;">
+					<a id="showmaintcart" href="#" onclick="javascript:showDialog(); return false;">Maintenance Cart (<span id="maintcartsize">0</span>)</a>
+		</div>
+		<style type="text/css" media="screen">
+
+			
+			/*
+			 * Override styles needed due to the mix of three different CSS sources! For proper examples
+			 * please see the themes example in the 'Examples' section of this site
+			 */
+			.dataTables_info { padding-top: 0; }
+			.dataTables_paginate { padding-top: 0; }
+			.css_right { float: right; }
+			#products_wrapper .fg-toolbar { font-size: 0.9em }
+			#theme_links span { float: left; padding: 2px 10px; }
+			
+		</style>
+
+<table cellpadding="0" cellspacing="0" border="0" class="display">
+
+				<tbody>
+					<tr id="filter_purchace">
+						<td align="left">Purchace Date</td>
+						<td align="left">
+							<label for="date-range-min">From:</label><input type="text" name="date-range-min" id="date-range-min">
+							<label for="date-range-max">To:</label><input type="text" name="date-range-max" id="date-range-max">
+						</td>
+					</tr>
+					<tr id="filter_supply">
+						<td align="left">Supplier</td>
+						<td align="left">
+							<select id="col9_filter" style="width:350px;">
+								<option value="">All</option>
+								{% for company in companies %}
+									<option value="{{company.company_name}}">{{company.company_name}}</option>
+								{% endfor %}
+							</select>
+						</td>
+					</tr>
+					<tr id="filter_project">
+						<td align="left">Project</td>
+						<td align="left">
+							<select id="col10_filter" style="width:350px;">
+								<option value="">All</option>
+								<option value="None">None</option>
+								{% for proj in projects %}
+									<option value="{{proj.project_name}}">{{proj.project_name}}</option>
+								{% endfor %}
+							</select>
+						</td>
+					</tr>													
+				</tbody>
+			</table>
+
+    <table id="products" cellpadding="0" cellspacing="0" border="0" class="display">
+<thead> 
+<tr> 
+    <th>Product Name</th> 
+    <th>Model</th> 
+    <th>Serial</th> 
+    <th>Purchace Date</th> 
+    <th>Location</th>
+	<th>Value</th>
+	<th>Actions</th>
+	<th>Show</th>
+	<th>Προμηθευτής</th>
+	<th>Project</th>  
+</tr> 
+</thead>
+<tbody>
+	{% for prod in products %}
+	<tr>
+		<td>
+		{{prod.description}}
+		</td>
+		<td>
+		{{prod.model}}	
+		</td>
+		<td>
+			{{prod.serial_number}}
+		</td>
+		<td>
+			{{prod.date_of_purchase.date}}
+		</td>
+		<td>
+			{{prod.location}}
+		</td>
+		<td>
+			{{prod.totamount}}
+		</td>
+		<td>
+			<a href="{% url admin:equip_productcomponent_change prod.pk %}" target="_blank">edit</a><br>
+			<a href="{% url admin:equip_delegation_add%}?product={{prod.pk}}" target="_blank">delegate</a><br>
+			<!--<a href="{% url admin:equip_maintenance_add%}?products={{prod.pk}}">maintenance</a>-->
+			<a href="#" onclick="javascript:addToMaint({{prod.pk}},'{{prod}}'); return false;">maintenance</a>
+		</td>
+		<td>
+			<a href="#" onclick="javascript:showDetails({{prod.pk}}); return false;">details</a>
+		</td>
+		<td>
+			{{prod.companyoid}}
+		</td>
+		<td>
+			{{prod.projectid}}
+		</td>
+	</tr>
+	{% endfor %}
+</tbody>
+	<tfoot>
+		<tr>
+
+			<th style="text-align:right" colspan="7">Displayed Total:</th>
+			<th></th>
+		</tr>
+	</tfoot>
+</table>
+<div id="productdetails"></div>

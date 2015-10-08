@@ -1,0 +1,219 @@
+<script type="text/javascript">
+	$(function() 
+    { 
+        $("#search").dataTable({
+					"bJQueryUI": true,
+					"sPaginationType": "full_numbers",
+					"fnFooterCallback": function ( nFoot, aaData, iStart, iEnd, aiDisplay ) {
+						/*
+						 * Calculate the total value in this table (ie inc. outside
+						 * the pagination)
+						 */
+//						var iTotalMarket = 0;
+//						for ( var i=0 ; i<aaData.length ; i++ )
+//						{
+//							iTotalMarket += aaData[i][5]*1;
+//						}
+						var iTotalMarket = 0;
+						for ( var i=iStart ; i<iEnd ; i++ )
+						{
+							iTotalMarket += aaData[ aiDisplay[i] ][5]*1;
+						}
+
+						
+						/* Modify the footer row to match what we want */
+						var nCells = nFoot.getElementsByTagName('th');
+						nCells[1].innerHTML = iTotalMarket.toFixed(2);
+					},
+					"oLanguage": {
+						"sLengthMenu": 'Display <select><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option><option value="-1">All</option></select> records'
+					}
+	});
+				$("#global_filter").keyup( function() { fnFilterGlobal( ); } );
+				$("#global_regex").click(  function() { fnFilterGlobal( ); } );
+				$("#global_smart").click(  function() { fnFilterGlobal( ); } );
+				
+				$("#col1_filter").keyup( function() { fnFilterColumn( 0 ); } );
+				$("#col1_regex").click(  function() { fnFilterColumn( 0 ); } );
+				$("#col1_smart").click(  function() { fnFilterColumn( 0 ); } );
+				
+				$("#col2_filter").keyup( function() { fnFilterColumn( 1 ); } );
+				$("#col2_regex").click(  function() { fnFilterColumn( 1 ); } );
+				$("#col2_smart").click(  function() { fnFilterColumn( 1 ); } );
+				
+				$("#col3_filter").keyup( function() { fnFilterColumn( 2 ); } );
+				$("#col3_regex").click(  function() { fnFilterColumn( 2 ); } );
+				$("#col3_smart").click(  function() { fnFilterColumn( 2 ); } );
+				
+				$("#col4_filter").keyup( function() { fnFilterColumn( 3 ); } );
+				$("#col4_regex").click(  function() { fnFilterColumn( 3 ); } );
+				$("#col4_smart").click(  function() { fnFilterColumn( 3 ); } );
+				
+				$("#col5_filter").keyup( function() { fnFilterColumn( 4 ); } );
+				$("#col5_regex").click(  function() { fnFilterColumn( 4 ); } );
+				$("#col5_smart").click(  function() { fnFilterColumn( 4 ); } );
+
+				$("#col6_filter").keyup( function() { fnFilterColumn( 5 ); } );
+				$("#col6_regex").click(  function() { fnFilterColumn( 5 ); } );
+				$("#col6_smart").click(  function() { fnFilterColumn( 5 ); } );
+	
+
+
+
+    });
+function fnFilterGlobal ()
+{
+	$('#search').dataTable().fnFilter( 
+		$("#global_filter").val(),
+		null, 
+		$("#global_regex")[0].checked, 
+		$("#global_smart")[0].checked
+	);
+}
+
+function fnFilterColumn ( i )
+{
+	$('#search').dataTable().fnFilter( 
+		$("#col"+(i+1)+"_filter").val(),
+		i, 
+		$("#col"+(i+1)+"_regex")[0].checked, 
+		$("#col"+(i+1)+"_smart")[0].checked
+	);
+}
+
+
+</script>
+
+		<style type="text/css" media="screen">
+
+			
+			/*
+			 * Override styles needed due to the mix of three different CSS sources! For proper examples
+			 * please see the themes example in the 'Examples' section of this site
+			 */
+			.dataTables_info { padding-top: 0; }
+			.dataTables_paginate { padding-top: 0; }
+			.css_right { float: right; }
+			#search_wrapper .fg-toolbar { font-size: 0.9em }
+			#theme_links span { float: left; padding: 2px 10px; }
+			
+		</style>
+
+		<table cellpadding="0" cellspacing="0" border="0" class="display">
+
+				<thead>
+				<tr>
+					<th>Target</th>
+					<th>Filter text</th>
+					<th>Treat as regex</th>
+					<th>Use smart filter</th>
+				</tr>
+
+				</thead>
+				<tbody>
+					<tr id="filter_global">
+						<td align="center">Global filtering</td>
+						<td align="center"><input type="text"     name="global_filter" id="global_filter"></td>
+						<td align="center"><input type="checkbox" name="global_regex"  id="global_regex" ></td>
+						<td align="center"><input type="checkbox" name="global_smart"  id="global_smart"  checked></td>
+					</tr>
+
+					<tr id="filter_col1">
+						<td align="center">Product Name</td>
+						<td align="center"><input type="text"     name="col1_filter" id="col1_filter"></td>
+						<td align="center"><input type="checkbox" name="col1_regex"  id="col1_regex"></td>
+						<td align="center"><input type="checkbox" name="col1_smart"  id="col1_smart" checked></td>
+					</tr>
+					<tr id="filter_col2">
+						<td align="center">Model</td>
+
+						<td align="center"><input type="text"     name="col2_filter" id="col2_filter"></td>
+						<td align="center"><input type="checkbox" name="col2_regex"  id="col2_regex"></td>
+						<td align="center"><input type="checkbox" name="col2_smart"  id="col2_smart" checked></td>
+					</tr>
+					<tr id="filter_col3">
+						<td align="center">Serial</td>
+						<td align="center"><input type="text"     name="col3_filter" id="col3_filter"></td>
+						<td align="center"><input type="checkbox" name="col3_regex"  id="col3_regex"></td>
+
+						<td align="center"><input type="checkbox" name="col3_smart"  id="col3_smart" checked></td>
+					</tr>
+					<tr id="filter_col4">
+						<td align="center">Purchace Date</td>
+						<td align="center"><input type="text"     name="col4_filter" id="col4_filter"></td>
+						<td align="center"><input type="checkbox" name="col4_regex"  id="col4_regex"></td>
+						<td align="center"><input type="checkbox" name="col4_smart"  id="col4_smart" checked></td>
+					</tr>
+
+					<tr id="filter_col5">
+						<td align="center">Location</td>
+						<td align="center"><input type="text"     name="col5_filter" id="col5_filter"></td>
+						<td align="center"><input type="checkbox" name="col5_regex"  id="col5_regex"></td>
+						<td align="center"><input type="checkbox" name="col5_smart"  id="col5_smart" checked></td>
+					</tr>
+					<tr id="filter_col6">
+						<td align="center">Value</td>
+						<td align="center"><input type="text"     name="col6_filter" id="col6_filter"></td>
+						<td align="center"><input type="checkbox" name="col6_regex"  id="col6_regex"></td>
+						<td align="center"><input type="checkbox" name="col6_smart"  id="col6_smart" checked></td>
+					</tr>
+				</tbody>
+			</table>
+    <table id="search" cellpadding="0" cellspacing="0" border="0" class="display">
+<thead> 
+<tr> 
+    <th>Product Name</th> 
+    <th>Model</th> 
+    <th>Serial</th> 
+    <th>Purchace Date</th> 
+    <th>Location</th>
+	<th>Value</th>
+	<th>Maintenance</th>
+	<th>Maintenance Company</th>
+	<th>Delegation</th>    
+</tr> 
+</thead>
+<tbody>
+	{% for prod in products %}
+	<tr>
+		<td>
+		{{prod.description}}
+		</td>
+		<td>
+		{{prod.model}}	
+		</td>
+		<td>
+			{{prod.serial_number}}
+		</td>
+		<td>
+			{{prod.date_of_purchase}}
+		</td>
+		<td>
+			{{prod.location}}
+		</td>
+		<td>
+			{{prod.totamount}}
+		</td>
+		<td>
+			{{prod.maintenance_set.all.0}}
+		</td>
+		<td>
+			{{prod.maintenance_set.all.0.company}}
+		</td>
+		<td>
+			{{prod.maintenance_set.all.0.company}}
+		</td>
+		<td>
+			{{prod.delegation_set.all.0.person}}
+		</td>
+	</tr>
+	{% endfor %}
+</tbody>
+	<tfoot>
+		<tr>
+
+			<th style="text-align:right" colspan="5">Displayed Total:</th>
+			<th></th>
+		</tr>
+	</tfoot>
+</table>
