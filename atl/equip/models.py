@@ -17,7 +17,7 @@ class City(models.Model):
         ordering = ['name']
     def __unicode__(self):
         return self.name
-    
+   
 # Create your models here.
 class Place(models.Model):
     id = models.AutoField(primary_key=True)
@@ -236,7 +236,6 @@ class ProductComponent(models.Model):
         self.model = self.parent.model
         self.assetid = self.parent.assetid
         self.companyoid = self.parent.companyoid
-        self.invoice_no = self.parent.invoice_no
         self.projectid = self.parent.projectid
         self.date_of_purchase = self.parent.date_of_purchase
         super(ProductComponent, self).save(*args,**kwargs)
