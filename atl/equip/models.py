@@ -185,6 +185,7 @@ class ProductComponent(models.Model):
     vat = models.FloatField(db_column='VAT', blank=True, max_length=200, verbose_name="ΦΠΑ") # Field name made lowercase.
     totamount = models.FloatField(null=True, db_column='TOTAMOUNT', blank=True, max_length=200, verbose_name="Σύνολο") # Field name made lowercase.
     notes = models.TextField(null=True, db_column='NOTES', blank=True, verbose_name="Σημειώσεις") # Field name made lowercase.
+    pending = models.BooleanField(default=False)
 
     class Meta:
         db_table = u'productcomponenttable_37'
