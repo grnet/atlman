@@ -20,7 +20,12 @@
 								{"bSearchable": true,"bSortable": true}, {"bSearchable": true,"bSortable": true}, {"bSearchable": true,"bSortable": true},
 								{"bSearchable": false,"bSortable": false},
 								{"bSearchable": true,"bSortable": true},
-								{"bSearchable": false,"bSortable": false},{"bSearchable": false,"bSortable": false}, {"bVisible":false},{"bVisible":false}],
+								{"bSearchable": false,"bSortable": false},
+                                {"bSearchable": false,"bSortable": false}, 
+                                {"bVisible":false},
+                                {"bVisible":false},
+                                {"bVisible":true}
+],
 					"fnFooterCallback": function ( nFoot, aaData, iStart, iEnd, aiDisplay ) {
 						/*
 						 * Calculate the total value in this table (ie inc. outside
@@ -134,6 +139,7 @@ $('.itemDelete').live('click', function() {
 
 $("#col12_filter").change( function() { fnFilterColumn( 11 ); } );
 $("#col13_filter").change( function() { fnFilterColumn( 12 ); } );
+$("#col14_filter").click( function() { fnFilterColumn( 13 ); } );
 $("#col6_filter").change( function() { fnFilterColumn( 5 ); } );
 $("#col2_filter").keyup( function() {
 	fnFilterColumn( 1 ); } );
@@ -254,6 +260,16 @@ function fnFilterColumn ( i )
 							<input type="text" name="col2_filter" id="col2_filter">
 						</td>
 					</tr>
+                    <tr id="pending_filter_row">
+						<td align="left">Pending</td>
+						<td align="left">
+<select id="col14_filter">
+<option value="">All</option>
+<option value="1">Pending</option>
+<option value="2">Not Pending</option></select>
+							<input type="checkbox" id="col14_filter">
+						</td>
+					</tr>
 				</tbody>
 			</table>
 
@@ -273,6 +289,7 @@ function fnFilterColumn ( i )
 	<th>Show</th>
 	<th>Προμηθευτής</th>
 	<th>Project</th>
+	<th>Pending</th>
 </tr>
 </thead>
 <tbody>
@@ -319,6 +336,13 @@ function fnFilterColumn ( i )
 		</td>
 		<td>
 			{{prod.projectid}}
+		</td>
+		<td>
+            {% if prod.pending == True %}
+                1
+            {% else %}
+                2
+            {% endif %}
 		</td>
 	</tr>
 	{% endfor %}
