@@ -22,11 +22,12 @@ class City(models.Model):
 class Place(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=50, verbose_name="Ονομασία")
-    address = models.CharField(max_length=50, blank=True, null=True, verbose_name="Διεύθυνση")
+    address = models.CharField(max_length=250, blank=True, null=True, verbose_name="Διεύθυνση")
     city = models.ForeignKey(City, blank=True, null=True, db_column='city', verbose_name="Πόλη")
     phone = models.IntegerField(max_length=15, blank=True, null=True, verbose_name="Τηλέφωνο")
     fax = models.IntegerField(max_length=15, blank=True, null=True, verbose_name="Fax")
     mail = models.CharField(max_length=50, blank=True, null=True, verbose_name="E-mail")
+    api_id = models.IntegerField(blank=True, null=True)
     
     class Meta:
         db_table = u'placetable'
