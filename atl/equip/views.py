@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*- vim:encoding=utf-8:
 # vim: tabstop=4:shiftwidth=4:softtabstop=4:expandtab
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.core.context_processors import request
 from django.template.context import RequestContext
 from django.core.urlresolvers import reverse
-#from atl.equip.forms import *
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from atl.equip.models import *
+from atl.equip.forms import SerialsForm
 from datetime import *
 import operator
 
@@ -72,6 +72,15 @@ def search(request):
 def make_unique_list(mylist):
     myset = set(mylist)
     return list(myset)
+
+def serials_input(request):
+    form = SerialsForm()
+    prodid = request.GET.get('prod')
+    if not prodid:
+       return redirect('/equip')
+    ret = {'prodid': prodid, 'form': form}
+    return render_to_response('serials.html', ret, context_instance=RequestContext(request) )
+
 #def search_old(request):
 ##    if request.method == 'POST':
 ##        productform = ProductsForm(request.POST)
