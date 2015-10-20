@@ -24,7 +24,7 @@
                                 {"bSearchable": false,"bSortable": false}, 
                                 {"bVisible":false},
                                 {"bVisible":false},
-                                {"bVisible":true}
+                                {"bVisible":false}
 ],
 					"fnFooterCallback": function ( nFoot, aaData, iStart, iEnd, aiDisplay ) {
 						/*
@@ -263,11 +263,11 @@ function fnFilterColumn ( i )
                     <tr id="pending_filter_row">
 						<td align="left">Pending</td>
 						<td align="left">
-<select id="col14_filter">
-<option value="">All</option>
-<option value="1">Pending</option>
-<option value="2">Not Pending</option></select>
-							<input type="checkbox" id="col14_filter">
+                            <select id="col14_filter">
+                                <option value="">All</option>
+                                <option value="1">Pending</option>
+                                <option value="2">Not Pending</option>
+                            </select>
 						</td>
 					</tr>
 				</tbody>
@@ -338,7 +338,7 @@ function fnFilterColumn ( i )
 			{{prod.projectid}}
 		</td>
 		<td>
-            {% if prod.pending == True %}
+            {% if prod.pending %}
                 1
             {% else %}
                 2
