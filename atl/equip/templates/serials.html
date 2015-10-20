@@ -1,0 +1,53 @@
+<html>
+<head>
+  <link rel="stylesheet" href="{{MEDIA_URL}}equip/css/grnet_project_css/style.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="{{MEDIA_URL}}equip/css/grnet_project_css/style.css" type="text/css" media="print" />
+  <style>
+    textarea{
+        vertical-align: top;
+    }
+  </style>
+</head>
+<body>
+    <div id="grnet-page-background-simple-gradient">
+    </div>
+<div id="grnet-main">
+        <div class="grnet-Sheet">
+            <div class="grnet-Sheet-tl"></div>
+            <div class="grnet-Sheet-tr"></div>
+            <div class="grnet-Sheet-bl"></div>
+            <div class="grnet-Sheet-br"></div>
+            <div class="grnet-Sheet-tc"></div>
+            <div class="grnet-Sheet-bc"></div>
+            <div class="grnet-Sheet-cl"></div>
+            <div class="grnet-Sheet-cr"></div>
+            <div class="grnet-Sheet-cc"></div>
+            <div class="grnet-Sheet-body">
+                <div class="grnet-Header">
+                    <div class="grnet-Header-png"></div>
+                </div>
+                <div id="form-wrapper" style="text-align:center">
+                    <form class="" method="GET" action="{% url admin:equip_product_change prodid %}">
+                        <h2 style="text-align:center">Product Component Serials</h2>
+                        <h6 style="text-align:center">Διαχωρισμός με ","</h6> 
+                        {% for field in form %}
+                            {% if field.name == "populate_all" %}
+                                <label for="{{field.name}}">{{field.label}}</label>
+                            {% else%}
+                                <label for="{{field.name}}"></label>
+                            {% endif %}
+                            {{field}}</br>
+                        {% endfor %}
+                        </br>
+                        </br>
+                        <input type="submit">
+                    </form>
+                </div>
+            </div>
+        </div>
+</div>
+
+
+
+</body>
+</html>
