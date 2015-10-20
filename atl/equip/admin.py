@@ -5,18 +5,10 @@ from django.conf import settings
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django_extensions.admin import ForeignKeyAutocompleteAdmin
 from django.forms import ModelForm
+from django.forms.models import BaseInlineFormSet
 from django import forms
 from django.conf.urls.defaults import *
 
-def product_component_form_factory(product):
-    class RuntimeProductForm(forms.ModelForm):
-        class Meta:
-            model = ProductComponent
-        def __init__(self, *args, **kwargs):
-            kwargs['initial'] = { 'assetcat':product.assetcat}
-            return super(RuntimeProductForm, self).__init__(*args, **kwargs)
-
-    return RuntimeProductForm
 
 class ProductComponentAdmin(admin.ModelAdmin):
     list_display = ('description', 'model', 'date_of_purchase', 'qty', 'get_parent', 'get_project')
@@ -24,22 +16,98 @@ class ProductComponentAdmin(admin.ModelAdmin):
     date_hierarchy = 'date_of_purchase'
     search_fields = ['description']
 
+class ProductComponentInlineFormset(BaseInlineFormSet):
+    serials = None
+
+    def set_initial(self):
+        total = self.total_form_count()
+        self.initial = []
+        existing = self.queryset.count()
+        if self.instance._populate_all:
+            for i in xrange(total):
+                initial = {
+                    'assetcat': self.instance.assetcat,
+                    'invoice_no': self.instance.children()[0].invoice_no,
+                }
+            
+                self.initial.append(initial)
+                if self.instance._pending_serials:
+                    initial.update({
+                        'description': self.instance.description,
+                        'price': self.instance.price,
+                        'totamount': self.instance.totamount,
+                        'vat': self.instance.vat,
+                        'grnet_supervisor': self.instance.children()[0].grnet_supervisor,
+                        'qty': self.instance.qty,
+                        'serial_number': self.instance._pending_serials[i],
+                    })
+                if self.instance.children()[0].location:
+                    initial.update({
+                        'location': self.instance.children()[0].location.id,
+                    })
+        else:
+            for i in xrange(total):
+                initial = {
+                    'assetcat': self.instance.assetcat,
+                    'invoice_no': self.instance.children()[0].invoice_no,
+                }
+                self.initial.append(initial)
+
+                if i < existing:
+                    
+                    continue
+                if self.instance._pending_serials:
+                    initial.update({
+                        'description': self.instance.description,
+                        'price': self.instance.price,
+                        'totamount': self.instance.totamount,
+                        'vat': self.instance.vat,
+                        'grnet_supervisor': self.instance.children()[0].grnet_supervisor,
+                        'qty': self.instance.qty,
+                        'serial_number': self.instance._pending_serials[i-existing-1],
+                    })
+                if self.instance.children()[0].location:
+                    initial.update({
+                        'location': self.instance.children()[0].location.id,
+                    })
+
+    def _construct_forms(self, *args, **kwargs):
+        self.set_initial()
+        return super(ProductComponentInlineFormset, self)._construct_forms(*args, **kwargs)
+
+    def __init__(self, data=None, *args, **kwargs):
+        super(ProductComponentInlineFormset, self).__init__(data, *args, **kwargs)
+
+
 class ProductComponentInline(admin.StackedInline):
     model = ProductComponent
     extra = 0
-    fields = ('description', 'serial_number', 'location', 'qty', 'assetcat', 'price', 'totamount', 'vat', 'grnet_supervisor', 'notes')
+    fields = ('description', 'serial_number', 'location', 'qty', 'assetcat',
+    'price', 'totamount', 'vat', 'grnet_supervisor', 'notes', 'invoice_no', 'pending')
+    formset = ProductComponentInlineFormset
+
     def get_formset(self, request, obj=None, **kwargs):
-        if obj is not None:
-            self.form = product_component_form_factory(obj)
+        curr_children = obj.productcomponent_set.count()
+        populate_all = request.GET.get('populate_all', False)
+        obj._populate_all = populate_all
+        obj._pending_serials = filter(bool, request.GET.get('serials','').split(","))
+        self.extra = len(obj._pending_serials)
+        if populate_all:
+            self.extra = self.extra - curr_children
+
         return super(ProductComponentInline, self).get_formset(request, obj, **kwargs)
 
+
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('description', 'model', 'assetcat', 'date_of_purchase','qty')
+    list_display = ('description', 'model', 'assetcat',
+    'date_of_purchase','qty')
     list_filter = ('date_of_purchase', 'assetcat', 'model')
     search_fields = ['description']
     date_hierarchy = 'date_of_purchase'
     fields = ('description', 'companyoid','projectid','model', 'qty', 'date_of_purchase', 'invoice_no', 'assetcat', 'price', 'totamount', 'vat')
-    readonly_fields=('description','companyoid','projectid','model','qty', 'price', 'totamount', 'vat', 'assetcat', 'date_of_purchase', 'invoice_no')
+    readonly_fields=('description','companyoid','projectid','model','qty',
+    'price', 'totamount', 'vat', 'assetcat', 'date_of_purchase',
+    'invoice_no')
     inlines = [
         ProductComponentInline,
     ]
