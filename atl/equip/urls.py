@@ -27,6 +27,5 @@ urlpatterns = patterns('atl.equip.views',
     (r'^delegations/$', 'delegations'),
     (r'^search/$', 'search'),
     (r'^product/$', 'product_details'),
-   
-
+    (r'^serials/$', 'serials_input'),
 )
