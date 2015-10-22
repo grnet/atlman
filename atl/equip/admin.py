@@ -46,6 +46,7 @@ class ProductComponentInlineFormset(BaseInlineFormSet):
                         'location': self.instance.children()[0].location.id,
                     })
         else:
+            rev_serials = list(reversed(self.instance._pending_serials))
             for i in xrange(total):
                 initial = {
                     'assetcat': self.instance.assetcat,
@@ -64,7 +65,7 @@ class ProductComponentInlineFormset(BaseInlineFormSet):
                         'vat': self.instance.vat,
                         'grnet_supervisor': self.instance.children()[0].grnet_supervisor,
                         'qty': self.instance.qty,
-                        'serial_number': self.instance._pending_serials[i-existing-1],
+                        'serial_number': rev_serials[i-existing-1],
                     })
                 if self.instance.children()[0].location:
                     initial.update({
@@ -89,6 +90,8 @@ class ProductComponentInline(admin.StackedInline):
     def get_formset(self, request, obj=None, **kwargs):
         curr_children = obj.productcomponent_set.count()
         populate_all = request.GET.get('populate_all', False)
+        if populate_all == "False":
+            populate_all = False
         obj._populate_all = populate_all
         obj._pending_serials = filter(bool, request.GET.get('serials','').split(","))
         self.extra = len(obj._pending_serials)

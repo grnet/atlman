@@ -26,7 +26,13 @@ def products(request):
 #    projpks = [x.projectid_id for x in products]
 #    uniqueprojkeys = dict(map(lambda i: (i,1),projpks)).keys()
 #    projects = Project.objects.filter(pk__in=uniqueprojkeys).order_by('project_name').select_related()
-    products = ProductComponent.objects.select_related('companyoid', 'assetcat', 'projectid', 'assetid', 'parent', 'assetid__ascid')
+    #related_fields = ['companyoid', 'assetcat', 'projectid', 'assetid',
+    #'parent', 'assetid__ascid']
+    #related_fields = map(lambda x:x.upper(), related_fields)
+    products = ProductComponent.objects.select_related('companyoid', 'assetcat', 'projectid', 'assetid',
+    'parent', 'assetid__ascid')
+    #products = products.filter()
+    #products = products[:54] #TODO: remove this
     companies = make_unique_list(products.values_list('companyoid__company_name', flat=True))
     projs = []
     for product in products:
@@ -74,10 +80,17 @@ def make_unique_list(mylist):
     return list(myset)
 
 def serials_input(request):
-    form = SerialsForm()
     prodid = request.GET.get('prod')
-    if not prodid:
-       return redirect('/equip')
+    data = {'populate_all': False}
+    try:
+        product = Product.objects.get(id=prodid)
+        if product.children().count() == 1:
+            if not product.children()[0].serial_number:
+                data['populate_all'] = True
+    except Product.DoesNotExist:
+        if not prodid:
+            return redirect('/equip')
+    form = SerialsForm(initial=data)
     ret = {'prodid': prodid, 'form': form}
     return render_to_response('serials.html', ret, context_instance=RequestContext(request) )
 

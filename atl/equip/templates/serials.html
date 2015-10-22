@@ -31,11 +31,7 @@
                         <h2 style="text-align:center">Product Component Serials</h2>
                         <h6 style="text-align:center">Διαχωρισμός με ","</h6> 
                         {% for field in form %}
-                            {% if field.name == "populate_all" %}
-                                <label for="{{field.name}}">{{field.label}}</label>
-                            {% else%}
-                                <label for="{{field.name}}"></label>
-                            {% endif %}
+                            <label for="{{field.name}}"></label>
                             {{field}}</br>
                         {% endfor %}
                         </br>

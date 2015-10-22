@@ -42,4 +42,4 @@ class ProductsForm(forms.Form):
     
 class SerialsForm(forms.Form):
     serials = forms.CharField(label='Serials', widget=forms.Textarea)
-    populate_all = forms.BooleanField(label="Βάλε serial σε όλες τις εγγραφές")
+    populate_all = forms.BooleanField(widget=forms.HiddenInput)
