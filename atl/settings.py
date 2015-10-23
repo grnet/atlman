@@ -22,23 +22,6 @@ LDAP_AUTH_IS_STAFF = False
 
 MANAGERS = ADMINS
 
-# DATABASE_ENGINE = 'sql_server.pyodbc'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-# DATABASE_NAME = 'EDET'             # Or path to database file if using sqlite3.
-# #DATABASE_USER = 'sa'             # Not used with sqlite3.
-# 
-# DATABASE_USER = 'sqltest2'             # Not used with sqlite3.
-# DATABASE_PASSWORD = 'grnetatlantis'         # Not used with sqlite3.
-# DATABASE_HOST = '195.251.29.120'             # Set to empty string for localhost. Not used with sqlite3.
-# DATABASE_PORT = '1433'             # Set to empty string for default. Not used with sqlite3.
-# DATABASE_OPTIONS = {
-#     'driver': 'FreeTDS',
-#     'dsn': 'Atlantis',
-#     'collation':'UTF-8', # ODBC DSN name defined in your odbc.ini
-# }
-
-
-
-
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
