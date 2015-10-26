@@ -17,61 +17,47 @@ class ProductComponentAdmin(admin.ModelAdmin):
     search_fields = ['description']
 
 class ProductComponentInlineFormset(BaseInlineFormSet):
-    serials = None
-
+    
     def set_initial(self):
+
+        # if post do not return initial or data are not saved
+        if not self.instance._set_initial:
+            return
+
         total = self.total_form_count()
-        self.initial = []
         existing = self.queryset.count()
-        if self.instance._populate_all:
-            for i in xrange(total):
-                initial = {
-                    'assetcat': self.instance.assetcat,
-                    'invoice_no': self.instance.children()[0].invoice_no,
-                }
-            
-                self.initial.append(initial)
-                if self.instance._pending_serials:
-                    initial.update({
-                        'description': self.instance.description,
-                        'price': self.instance.price,
-                        'totamount': self.instance.totamount,
-                        'vat': self.instance.vat,
-                        'grnet_supervisor': self.instance.children()[0].grnet_supervisor,
-                        'qty': self.instance.qty,
-                        'serial_number': self.instance._pending_serials[i],
-                    })
-                if self.instance.children()[0].location:
-                    initial.update({
-                        'location': self.instance.children()[0].location.id,
-                    })
-        else:
-            rev_serials = list(reversed(self.instance._pending_serials))
-            for i in xrange(total):
-                initial = {
-                    'assetcat': self.instance.assetcat,
-                    'invoice_no': self.instance.children()[0].invoice_no,
-                }
-                self.initial.append(initial)
+        self.initial = []
+        for i in xrange(total):
+            initial = {}
+            self.initial.append(initial)
+            if self.instance._populate_all and i == 0:
+                initial.update({
+                    'serial_number': self.instance._pending_serials[i],
+                })
+            if i < existing:
+                continue
 
-                if i < existing:
-                    
-                    continue
-                if self.instance._pending_serials:
-                    initial.update({
-                        'description': self.instance.description,
-                        'price': self.instance.price,
-                        'totamount': self.instance.totamount,
-                        'vat': self.instance.vat,
-                        'grnet_supervisor': self.instance.children()[0].grnet_supervisor,
-                        'qty': self.instance.qty,
-                        'serial_number': rev_serials[i-existing-1],
-                    })
-                if self.instance.children()[0].location:
-                    initial.update({
-                        'location': self.instance.children()[0].location.id,
-                    })
+            initial.update({
+                'description': self.instance.description,
+                'price': self.instance.price,
+                'totamount': self.instance.totamount,
+                'vat': self.instance.vat,
+                'grnet_supervisor': self.instance.children()[0].grnet_supervisor,
+                'qty': self.instance.qty,
+                'invoice_no': self.instance.children()[0].invoice_no,
+                'assetcat': self.instance.assetcat.id
+            })
 
+            if self.instance._populate_all:
+                correction = 1
+            else:
+                correction = 0
+            if self.instance._pending_serials:
+                initial.update({
+                    'serial_number': self.instance._pending_serials[i - existing + correction],
+                })
+
+        
     def _construct_forms(self, *args, **kwargs):
         self.set_initial()
         return super(ProductComponentInlineFormset, self)._construct_forms(*args, **kwargs)
@@ -95,6 +81,7 @@ class ProductComponentInline(admin.StackedInline):
         obj._populate_all = populate_all
         obj._pending_serials = filter(bool, request.GET.get('serials','').split(","))
         self.extra = len(obj._pending_serials)
+        obj._set_initial = request.method == 'GET'
         if populate_all:
             self.extra = self.extra - curr_children
 
