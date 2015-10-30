@@ -4,7 +4,7 @@ setup_environ(settings)
 from equip.models import Place, ProductComponent
 
 
-filename = 'correct_assignments.txt'
+filename = 'parsed_assignments.txt'
 with open(filename, 'r') as f:
     data = f.readlines()
 matches = []
