@@ -6,7 +6,10 @@ import requests
 from django.core.management import setup_environ
 setup_environ(settings)
 from equip.models import Place
+import time
 
+# suppress ssl warning
+requests.packages.urllib3.disable_warnings()
 
 data_url = "https://mon.grnet.gr/api/pops/locations/"
 web_data = requests.get(data_url).text
@@ -42,7 +45,9 @@ for item in data:
                              address=address)
         created += 1
 
+print time.strftime("%d/%m/%y - %H:%M:%S")
 print "Api total places: {}".format(str(api_total))
 print "Places created: {}".format(str(created))
 print "Places updated: {}".format(str(updated))
 print "Places not_changed: {}".format(str(not_changed))
+print '\n\n'
