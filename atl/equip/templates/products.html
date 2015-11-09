@@ -326,7 +326,7 @@ function fnFilterColumn ( i )
 			<a href="{% url admin:equip_product_change prod.parent.pk %}" target="_blank">edit</a><br>
 			<a href="{% url admin:equip_delegation_add%}?product={{prod.pk}}" target="_blank">delegate</a><br>
 			<!--<a href="{% url admin:equip_maintenance_add%}?products={{prod.pk}}">maintenance</a>-->
-			<a href="#" onclick="javascript:addToMaint({{prod.pk}},'{{prod}}'); return false;">maintenance</a>
+			<a href="#" onclick="javascript:addToMaint({{prod.pk}},'{{prod|escapejs}}'); return false;">maintenance</a>
 		</td>
 		<td>
 			<a href="#" onclick="javascript:showDetails({{prod.pk}}); return false;">details</a>
